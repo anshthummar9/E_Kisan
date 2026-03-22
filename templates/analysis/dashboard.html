@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - E-Kisaan{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Welcome, {{ user.username }}!</h1>
+            <a href="{% url 'analysis' %}" class="btn btn-success btn-lg shadow-sm">
+                <i class="bi bi-plus-circle"></i> New Analysis
+            </a>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Nutrient Trends (Last 10 Analyses)</h5>
+                <canvas id="nutrientChart" width="400" height="150"></canvas>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Recent Reports</h5>
+
+                {% if reports %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Crop Predicted</th>
+                                <th>Fertilizer Recommended</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in reports %}
+                            <tr>
+                                <td>{{ report.created_at|date:"M d, Y" }}</td>
+                                <td><span class="badge bg-success">{{ report.predicted_crop }}</span></td>
+                                <td>{{ report.predicted_fertilizer|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'report_detail' report.id %}" class="btn btn-sm btn-outline-info">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No analyses yet. Start by clicking "New Analysis".</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ dates|json_script:"dates-data" }}
+{{ n_levels|json_script:"n-levels-data" }}
+{{ p_levels|json_script:"p-levels-data" }}
+{{ k_levels|json_script:"k-levels-data" }}
+
+<script>
+    const dates = JSON.parse(document.getElementById('dates-data').textContent);
+    const nLevels = JSON.parse(document.getElementById('n-levels-data').textContent);
+    const pLevels = JSON.parse(document.getElementById('p-levels-data').textContent);
+    const kLevels = JSON.parse(document.getElementById('k-levels-data').textContent);
+
+    const ctx = document.getElementById('nutrientChart').getContext('2d');
+    const nutrientChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [
+                {
+                    label: 'Nitrogen (N)',
+                    data: nLevels,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    tension: 0.3
+                },
+                {
+                    label: 'Phosphorus (P)',
+                    data: pLevels,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.3
+                },
+                {
+                    label: 'Potassium (K)',
+                    data: kLevels,
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Report Details - E-Kisaan{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Report Details</h2>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Soil & Weather Nutrients (Recorded on {{ report.created_at|date:"M d, Y H:i" }})</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Soil Information</h6>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Soil Color:</span> <strong>{{ report.soil_color|title }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Nitrogen (N):</span> <strong>{{ report.nitrogen }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Phosphorus (P):</span> <strong>{{ report.phosphorus }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Potassium (K):</span> <strong>{{ report.potassium }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>pH Level:</span> <strong>{{ report.ph }}</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Weather Information</h6>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Temperature:</span> <strong>{{ report.temperature }} °C</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Rainfall:</span> <strong>{{ report.rainfall }} mm</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Crop Result -->
+            <div class="col-md-6">
+                <div class="card bg-success text-white h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Recommended Crop</h4>
+                        <h1 class="display-5 fw-bold mt-3">{{ report.predicted_crop }}</h1>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fertilizer Result -->
+            <div class="col-md-6">
+                <div class="card bg-warning text-dark h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Suggested Fertilizer</h4>
+                        <h1 class="display-6 fw-bold mt-3">{{ fertilizer|default:"Not available" }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

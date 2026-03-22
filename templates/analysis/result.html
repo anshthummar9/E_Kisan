@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Analysis Result - E-Kisaan{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="mb-4 text-center">Analysis Results</h2>
+
+        <!-- Weather Card -->
+        <div class="card mb-4 border-info">
+            <div class="card-body">
+                <h5 class="card-title text-info">Weather in {{ city }}</h5>
+                <p class="card-text">
+                    <strong>Temperature:</strong> {{ report.temperature }}°C <br>
+                    <strong>Rainfall (Est.):</strong> {{ report.rainfall }} mm
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Crop Result -->
+            <div class="col-md-6">
+                <div class="card bg-success text-white h-100">
+                    <div class="card-body text-center">
+                        <h4>Recommended Crop</h4>
+                        <h1 class="display-4 fw-bold mt-3">{{ report.predicted_crop }}</h1>
+                        <p class="mt-2">Based on your soil and local climate.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fertilizer Result -->
+            <div class="col-md-6">
+                <div class="card bg-warning text-dark h-100">
+                    <div class="card-body text-center">
+                        <h4>Suggested Fertilizer</h4>
+                        <h1 class="display-5 fw-bold mt-3">{{ fertilizer }}</h1>
+                        <p class="mt-2 text-muted">To optimize growth for {{ report.predicted_crop }}.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'analysis' %}" class="btn btn-outline-primary me-2">Analyze Again</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

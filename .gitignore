@@ -1,0 +1,21 @@
+# Python/Django
+*.pyc
+*~
+__pycache__
+myvenv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables
+.env
+
+
+# ML models and datasets
+*.pkl
+
+# VS Code / IDEs
+.vscode/
+
+
