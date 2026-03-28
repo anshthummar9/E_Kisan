@@ -23,7 +23,7 @@ E_Kisan is an AI-powered agriculture web application built with Django. It assis
   - NumPy (Numerical Computations)
   - Joblib (Model Serialization)
 - **Database:** 
-  - MySQL via `mysqlclient` 
+  - sqlite3 
 - **Frontend:** 
   - HTML5, CSS3, JavaScript
   - Django Templates (Server-side rendering)
@@ -35,61 +35,7 @@ E_Kisan is an AI-powered agriculture web application built with Django. It assis
 ## ⚙️ Prerequisites
 
 - Python 3.x installed on your system
-- MySQL Server 5.7+ installed and running
 - An API key from [OpenWeatherMap](https://openweathermap.org/api)
-
-## 🗄️ Database Setup
-
-This project uses **MySQL** as its database backend via the `mysqlclient` Python package.
-
-### 1. Install MySQL
-
-Download and install [MySQL Community Server](https://dev.mysql.com/downloads/mysql/). During setup, note the root password you configure — you'll need it below.
-
-### 2. Configure Database Environment Variables
-
-Add the following variables to your `.env` file in the project root (alongside `manage.py`):
-
-```env
-DB_NAME=EKisan_db
-DB_USER=root
-DB_PASSWORD=your_mysql_root_password
-DB_HOST=127.0.0.1
-DB_PORT=3306
-```
-
-| Variable      | Default      | Description                        |
-|---------------|--------------|------------------------------------|
-| `DB_NAME`     | `EKisan_db`  | Name of the MySQL database         |
-| `DB_USER`     | `root`       | MySQL username                     |
-| `DB_PASSWORD` | `password`   | MySQL user password                |
-| `DB_HOST`     | `127.0.0.1`  | MySQL host address                 |
-| `DB_PORT`     | `3306`       | MySQL port                         |
-
-### 3. Create the Database
-
-A helper script is provided to automatically create the database if it doesn't already exist. Run it from the project root:
-
-```bash
-python scripts/create_db.py
-```
-
-This script connects to MySQL using your `.env` credentials and runs:
-
-```sql
-CREATE DATABASE IF NOT EXISTS EKisan_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-> **Note:** If you prefer to create the database manually, open a MySQL shell and run the SQL command above.
-
-### 4. Apply Django Migrations
-
-After the database is created, apply Django's migrations to set up all tables:
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
 
 ## 🚀 Installation & Setup Instructions
 
