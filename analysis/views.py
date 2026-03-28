@@ -95,7 +95,8 @@ def analysis_view(request):
                     rainfall=rainfall,
                     temperature=temp,
                     predicted_crop=predicted_crop,
-                    predicted_fertilizer=predicted_fertilizer
+                    predicted_fertilizer=predicted_fertilizer,
+                    city=city
                 )
                 
                 # We might want to save fertilizer too, but model doesn't have a field yet.
@@ -130,3 +131,71 @@ def report_detail_view(request, report_id):
         'city': 'Not Specified',  # We did not save city in the model previously, but we have weather data
     }
     return render(request, 'analysis/report_detail.html', context)
+
+@login_required(login_url='login')
+def edit_report_view(request, report_id):
+    from django.shortcuts import get_object_or_404
+    report = get_object_or_404(SoilReport, id=report_id, user=request.user)
+    
+    if request.method == 'POST':
+        form = SoilAnalysisForm(request.POST, instance=report)
+        if form.is_valid():
+            try:
+                # 1. Extract Soil Data
+                data = form.cleaned_data
+                soil_color = data['soil_color']
+                N = data['nitrogen']
+                P = data['phosphorus']
+                K = data['potassium']
+                ph = data['ph']
+                
+                # 2. Use previously saved weather data as requested by user
+                temp = report.temperature
+                rainfall = report.rainfall
+
+                if CROP_MODEL is None or FERT_MODEL is None:
+                    raise Exception("ML Models are not loaded. Please restart the server.")
+
+                # 3. Model A: Crop Prediction
+                features_a = pd.DataFrame([[N, P, K, temp, ph, rainfall]], 
+                                        columns=['N', 'P', 'K', 'temperature', 'ph', 'rainfall'])
+                crop_idx = CROP_MODEL.predict(features_a)[0]
+                predicted_crop = CROP_ENCODER.inverse_transform([crop_idx])[0]
+                
+                # 4. Model B: Fertilizer Prediction
+                try:
+                    crop_enc = FERT_CROP_ENCODER.transform([predicted_crop])[0]
+                except ValueError:
+                    crop_enc = 0
+                    
+                try:
+                    soil_enc = FERT_SOIL_ENCODER.transform([soil_color])[0]
+                except ValueError:
+                    soil_enc = 0
+
+                features_b = pd.DataFrame([[N, P, K, crop_enc, soil_enc, ph, rainfall, temp]], 
+                                        columns=['N', 'P', 'K', 'Crop Type Encoded', 'Soil Type Encoded', 'ph', 'rainfall', 'temperature'])
+                predicted_fertilizer = FERT_MODEL.predict(features_b)[0]
+                
+                # 5. Update Database Record
+                # Save the new user inputs from form
+                report = form.save(commit=False)
+                # Update the AI predictions
+                report.predicted_crop = predicted_crop
+                report.predicted_fertilizer = predicted_fertilizer
+                report.is_edited = True
+                report.save()
+                
+                messages.success(request, "Analysis report successfully updated!")
+                return redirect('report_detail', report_id=report.id)
+                
+            except Exception as e:
+                print(f"Prediction Error on Edit: {e}")
+                messages.error(request, f"Error updating analysis! Check if models are loaded. Exception: {e}")
+                return redirect('dashboard')
+    else:
+        # Pre-fill form with old data
+        form = SoilAnalysisForm(instance=report)
+
+    # Pass is_edit=True so template can change titles
+    return render(request, 'analysis/input_form.html', {'form': form, 'is_edit': True, 'report_id': report.id})

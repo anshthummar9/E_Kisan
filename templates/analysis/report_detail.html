@@ -39,6 +39,9 @@
                         <h6 class="text-muted">Weather Information</h6>
                         <ul class="list-group list-group-flush mb-3">
                             <li class="list-group-item d-flex justify-content-between">
+                                <span>City:</span> <strong>{{ report.city|default:"Not specified" }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
                                 <span>Temperature:</span> <strong>{{ report.temperature }} °C</strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">

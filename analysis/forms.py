@@ -15,7 +15,7 @@ class SoilAnalysisForm(forms.ModelForm):
     
     class Meta:
         model = SoilReport
-        fields = ['soil_color', 'nitrogen', 'phosphorus', 'potassium', 'ph']
+        fields = ['soil_color', 'nitrogen', 'phosphorus', 'potassium', 'ph', 'city']
         widgets = {
             'soil_color': forms.Select(choices=SOIL_CHOICES, attrs={'class': 'form-select'}),
             'nitrogen': forms.NumberInput(attrs={'class': 'form-control'}),

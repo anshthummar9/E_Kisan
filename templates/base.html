@@ -8,7 +8,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">🌾 E-Kisaan</a>
@@ -30,6 +30,13 @@
     </nav>
 
     <main class="container my-5">
+        {% if request.resolver_match.url_name != 'dashboard' and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.path != '/' %}
+            <div class="mb-4">
+                <button onclick="window.history.back()" class="btn btn-outline-secondary btn-sm shadow-sm fw-semibold">
+                    &larr; Go Back
+                </button>
+            </div>
+        {% endif %}
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -42,7 +49,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
         <p class="mb-0">&copy; 2026 E-Kisaan. Empowering Farmers with Technology.</p>
     </footer>
 

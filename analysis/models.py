@@ -12,6 +12,8 @@ class SoilReport(models.Model):
     temperature = models.FloatField()
     predicted_crop = models.CharField(max_length=100)
     predicted_fertilizer = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    is_edited = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

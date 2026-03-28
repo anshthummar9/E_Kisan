@@ -38,11 +38,19 @@
                         <tbody>
                             {% for report in reports %}
                             <tr>
-                                <td>{{ report.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    {{ report.created_at|date:"M d, Y" }}
+                                    {% if report.is_edited %}
+                                    <span class="badge bg-warning text-dark ms-1">Updated</span>
+                                    {% endif %}
+                                </td>
                                 <td><span class="badge bg-success">{{ report.predicted_crop }}</span></td>
                                 <td>{{ report.predicted_fertilizer|default:"-" }}</td>
                                 <td>
-                                    <a href="{% url 'report_detail' report.id %}" class="btn btn-sm btn-outline-info">View</a>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'report_detail' report.id %}" class="btn btn-sm btn-outline-info">View</a>
+                                        <a href="{% url 'edit_report' report.id %}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    </div>
                                 </td>
                             </tr>
                             {% endfor %}
