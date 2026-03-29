@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SoilAnalysisForm
 from .models import SoilReport
-from .utils import get_weather_data
+from .utils import get_weather_data, get_fertilizer_details, get_crop_schedule
 import joblib
 import os
 import pandas as pd
@@ -105,6 +105,8 @@ def analysis_view(request):
                 context = {
                     'report': report,
                     'fertilizer': predicted_fertilizer,
+                    'fertilizer_details': get_fertilizer_details(predicted_fertilizer),
+                    'crop_schedule': get_crop_schedule(predicted_crop, predicted_fertilizer, report.created_at),
                     'city': city,
                     'weather': weather
                 }
@@ -128,6 +130,8 @@ def report_detail_view(request, report_id):
     context = {
         'report': report,
         'fertilizer': report.predicted_fertilizer,
+        'fertilizer_details': get_fertilizer_details(report.predicted_fertilizer),
+        'crop_schedule': get_crop_schedule(report.predicted_crop, report.predicted_fertilizer, report.created_at),
         'city': 'Not Specified',  # We did not save city in the model previously, but we have weather data
     }
     return render(request, 'analysis/report_detail.html', context)
