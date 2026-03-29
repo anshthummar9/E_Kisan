@@ -7,6 +7,7 @@ E_Kisan is an AI-powered agriculture web application built with Django. It assis
 - **User Authentication:** Secure registration, login, and logout functionalities.
 - **Soil Analysis & Crop Prediction:** Takes soil parameters (N, P, K levels, pH, soil color) and suggests the best crop using a trained Machine Learning model.
 - **Fertilizer Recommendation:** Predicts the appropriate fertilizer based on the soil data, predicted crop, and environmental factors.
+- **Crop Lifecycle & Schedule Planner:** Generates a custom scheduling timeline mapping out sowing, watering, fertilizing, and harvesting phases tailored to the predicted crop.
 - **Weather Integration:** Automatically fetches real-time temperature and rainfall data for the user's city using the OpenWeatherMap API to improve prediction accuracy.
 - **User Dashboard:** Maintains a history of soil reports and provides visual charts tracking Nitrogen, Phosphorus, and Potassium (N-P-K) levels over time.
 
@@ -42,6 +43,9 @@ E_Kisan is an AI-powered agriculture web application built with Django. It assis
 Follow these steps to set up the project locally:
 
 1. **Navigate to the project directory:**
+   ```bash
+   cd "E_Kisan"
+   ```
 
 2. **Create a virtual environment:**
    ```bash
@@ -95,12 +99,13 @@ E_Kisan/
 │   ├── migrations/     # Database migration history
 │   ├── utils.py        # Utility functions (e.g., OpenWeatherMap API wrapper)
 │   ├── views.py        # Business logic for form processing and dashboard
-│   └── models.py       # Databse schema for SoilReport history
+│   └── models.py       # Database schema for SoilReport history
+├── scripts/            # Scripts for training machine learning models (e.g., train_model.py)
 ├── static/             # CSS, JS, and image assets
 ├── templates/          # Global HTML templates (base.html, dashboard view)
 ├── manage.py           # Django's command-line utility for administrative tasks
 ├── requirements.txt    # List of required Python packages
-└── .env                # Environment variables (API keys, DB config)
+└── .env                # Environment variables (API keys)
 ```
 
 ## 📝 Usage
@@ -109,4 +114,5 @@ E_Kisan/
 2. Go to the **Soil Analysis** page.
 3. Enter your soil details (Nitrogen, Phosphorus, Potassium, pH, Soil Color) and your City.
 4. Submit the form to view the prediction report for the best-suited crop and the required fertilizer.
-5. Track your history and view graphical trends of soil nutrients from your personal **Dashboard**.
+5. Review the custom **Crop Lifecycle & Schedule Planner** timeline provided alongside your analysis results.
+6. Track your history and view graphical trends of soil nutrients from your personal **Dashboard**.
