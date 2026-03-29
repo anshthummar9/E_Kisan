@@ -138,3 +138,9 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Media files (Uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Session Configuration
+SESSION_COOKIE_AGE = 3600  # Expire session in 1 hour (3600 seconds) of inactivity
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when the user closes the browser
+SESSION_SAVE_EVERY_REQUEST = True  # Reset the 1-hour timeout on every new request
+
