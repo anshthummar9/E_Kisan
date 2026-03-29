@@ -18,4 +18,5 @@ venv.bak/
 # VS Code / IDEs
 .vscode/
 
-
+# SQLite Database
+db.sqlite3
